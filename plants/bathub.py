@@ -1,16 +1,28 @@
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
+from jax import random
 
-Height = input("Enter the height of the bathtub: ")
-Area = input("Enter the area of the bathtub: ")
-CrossSectionalArea = Area/100
-Velocity = jnp.sqrt(2 * 9.8 * Height)
-FlowRate = CrossSectionalArea * Velocity
+class BathtubPlant:
+    def __init__(self, height, area, rng_key):
+        self.height = height
+        self.area = area
+        self.cross_sectional_area = area / 100
+        self.g = 9.8
+        self.rng_key = rng_key
 
-U = input("Enter the output of the controller: ")
-D = input("Enter the disturbance: ")
 
-VolumeChange = U + D - FlowRate
-WaterHeight = VolumeChange / CrossSectionalArea
+    def step(self, U, dt = 1):
+        self.rng_key, subkey = random.split(self.rng_key)
+        D = random.normal(subkey) * 0.1
+        V = jnp.sqrt(2 * self.g * self.height)
+        Q = self.cross_sectional_area * V
+        db_dt = U + D - Q
+        dh_dt = db_dt / self.area
+
+        self.height += dh_dt * dt
+        self.height = jnp.maximum(self.height, 0)
+        return self.height, D
+    
+
 
