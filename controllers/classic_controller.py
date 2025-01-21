@@ -10,5 +10,4 @@ class ClassicController:
         self.integral += error * dt
         derivative = (error - self.prev_error) / dt
         self.prev_error = error
-        return self.kp * error + self.ki * self.integral + self.kd * derivative
-    
+        return self.k_p * error + self.k_i * self.integral + self.k_d * derivative

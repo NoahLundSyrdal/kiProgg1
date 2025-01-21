@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 from jax import random
-from ..plants.bathub import BathtubPlant
-from classic_controller import ClassicController
-
-
+from plants.bathtub import BathtubPlant
+from controllers.classic_controller import ClassicController
 
 # Initialize plant and controller
 rng_key = random.PRNGKey(0)
