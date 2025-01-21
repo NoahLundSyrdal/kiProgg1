@@ -1,4 +1,8 @@
 import matplotlib.pyplot as plt
+import sys
+import os
+sys.path.append(os.path.abspath("plants"))
+sys.path.append(os.path.abspath("controllers")) 
 from jax import random
 from plants.bathtub import BathtubPlant
 from controllers.classic_controller import ClassicController
