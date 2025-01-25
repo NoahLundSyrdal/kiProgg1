@@ -4,16 +4,14 @@ import matplotlib.pyplot as plt
 from jax import random
 
 class BathtubPlant:
-    def __init__(self, height, area, rng_key):
+    def __init__(self, height, area):
         self.height = height
         self.area = area
         self.cross_sectional_area = area / 100
         self.g = 9.8
-        self.rng_key = rng_key
-
 
     def step(self, U, dt = 1):
-        self.rng_key, subkey = random.split(self.rng_key)
+        subkey = random.split(jax.random.PRNGKey(0))[0]
         D = random.normal(subkey) * 0.1
         V = jnp.sqrt(2 * self.g * self.height)
         Q = self.cross_sectional_area * V
