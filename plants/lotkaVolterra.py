@@ -12,7 +12,7 @@ class LotkaVolterraPlant:
         self.rng_key = rng_key
         self.carrying_capacity = carrying_capacity  # Carrying capacity for prey
     
-    def step(self, dt=1, noise_scale=0.1):
+    def update(self, dt=1, noise_scale=0.1):
         x, y = self.prey, self.predator
         
         # Logistic growth for prey with carrying capacity

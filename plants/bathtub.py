@@ -10,7 +10,7 @@ class BathtubPlant:
         self.cross_sectional_area = area / 100
         self.g = 9.8
 
-    def step(self, U, dt = 1):
+    def update(self, U, dt = 1):
         subkey = random.split(jax.random.PRNGKey(0))[0]
         D = random.normal(subkey) * 0.1
         V = jnp.sqrt(2 * self.g * self.height)

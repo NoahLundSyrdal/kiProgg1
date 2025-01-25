@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 
 
 class CournotPlant:
-    def __init__(self, p_max, cm):
-        self.q1 = 0.9
-        self.q2 = 0.1
+    def __init__(self, p_max, cm, q1, q2):
+        self.q1 = q1
+        self.q2 = q2
         self.p_max = p_max
         self.cm = cm
 
