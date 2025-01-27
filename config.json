@@ -1,6 +1,19 @@
 {
     "plant":
         "bathtub",
+    "kp":
+        1,
+    "kd":
+        0.1,
+    "ki":
+        0.01,
+    "q1":
+        1,
+    "q2":
+        1,
+    "r":
+        1,  
+        
     "activation":
         "ReLu",
     "controller":
