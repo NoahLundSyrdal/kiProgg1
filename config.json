@@ -1,0 +1,53 @@
+{
+    "plant":
+        "bathtub",
+    "activation":
+        "ReLu",
+    "controller":
+        "classic",
+    "Neural_network":
+        {
+            "layer":
+                6,
+            "depth":
+                2,
+            "range_weights":
+                [0.05, 0.2],
+            "range_bias":
+                [0.05, 0.2]
+        },
+    "bathtuhb_area":
+        "100",
+    "baththub_cross_sectional":
+        "8",
+    "baththub_height":
+        "10",
+    "bathtub_gravity":
+        "9.81",
+    "cournot_max_price":
+        "100",
+    "cournot_marginal_cost":
+        "10",
+    "cournot_target":
+        "50",
+    "lotka_volterra_alpha":
+        "0.1",
+    "lotka_volterra_beta":
+        "0.02",
+    "lotka_volterra_gamma":
+        "0.3",
+    "lotka_volterra_delta":
+        "0.01",
+    "lotka_volterra_initial":
+        [10, 5],
+    "lotka_volterra_time":
+        100,
+    "lotka_volterra_step":
+        0.1,
+    "lotka_volterra_noise":
+        0.1,
+    "lotka_volterra_range":
+        [0.1, 0.5],
+    "lotka_volterra_target":
+        [0.1, 0.1]
+}
