@@ -1,4 +1,4 @@
-class ClassicController:
+class ClassicPIDController:
     def __init__(self, k_p, k_i, k_d):
         self.k_p = k_p
         self.k_i = k_i
@@ -6,7 +6,7 @@ class ClassicController:
         self.prev_error = 0
         self.integral = 0
 
-    def update(self, error, dt):
+    def update(self, error, dt=1):
         self.integral += error * dt
         derivative = (error - self.prev_error) / dt
         self.prev_error = error

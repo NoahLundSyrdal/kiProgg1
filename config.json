@@ -1,22 +1,18 @@
 {
     "plant":
         "bathtub",
-    "activation":
-        "ReLu",
     "controller":
         "classic",
-    "Neural_network":
-        {
-            "layer":
-                6,
-            "depth":
-                2,
-            "range_weights":
-                [0.05, 0.2],
-            "range_bias":
-                [0.05, 0.2]
+    "neural_network":
+        {   
+            "input_dim":
+                3,
+            "hidden_layers":
+                [16, 16],
+            "output_dim":
+                1
         },
-    "bathtuhb_area":
+    "bathtub_area":
         "100",
     "baththub_cross_sectional":
         "8",

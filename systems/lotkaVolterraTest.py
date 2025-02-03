@@ -1,6 +1,6 @@
 import jax.numpy as jnp
 from jax import random
-from plants.lotkaVolterra import LotkaVolterraPlant
+from lotka_volterra import LotkaVolterraPlant
 from controllers.classic_controller import ClassicController
 
 # Simulation setup
