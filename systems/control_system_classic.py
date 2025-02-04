@@ -5,6 +5,7 @@ from jax import random
 import numpy as np
 from plants.bathtub_plant import BathtubPlant
 from plants.cournot_plant import CournotPlant
+from plants.lotka_volterra import LotkaVolterraPlant
 from controllers.classic_controller import ClassicPIDController
 
 class ControlSystem:
@@ -48,5 +49,12 @@ if __name__ == "__main__":
     plant = CournotPlant(10.0, 2.0, 0.4, 0.6)
     controller = ClassicPIDController(k_p=2.0, k_i=0.1, k_d=0.01)
     system = ControlSystem(plant, controller, target=5)
+    system.run_epochs()
+    system.plot_results()
+
+
+    plant = LotkaVolterraPlant()
+    controller = ClassicPIDController(k_p=2.0, k_i=0.1, k_d=0.01)
+    system = ControlSystem(plant, controller, target=50)
     system.run_epochs()
     system.plot_results()
