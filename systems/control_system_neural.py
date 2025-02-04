@@ -3,12 +3,12 @@ import jax.numpy as jnp
 import matplotlib.pyplot as plt
 from jax import random
 import numpy as np
-from bathtub_plant import BathtubPlant
-from cournot_plant import CournotPlant
+from plants.bathtub_plant import BathtubPlant
+from plants.cournot_plant import CournotPlant
 from controllers.neural_controller import NeuralPIDController
 
 class ControlSystem:
-    def __init__(self, plant, controller, target, num_epochs=100, num_timesteps=50):
+    def __init__(self, plant, controller, target, num_epochs=20, num_timesteps=50):
         self.plant = plant
         self.controller = controller
         self.target = target
@@ -18,7 +18,6 @@ class ControlSystem:
     
     def run_epoch(self):
         error_history = jnp.zeros(self.num_timesteps)
-        self.history = []
         for t in range(self.num_timesteps):
             error = self.target - self.plant.current
             error_history = error_history.at[t].set(error)
@@ -26,7 +25,7 @@ class ControlSystem:
             derivative_error = (error - error_history[t-1]) if t > 0 else 0.0
             control_signal = float(self.controller.control(jnp.array([error, integral_error, derivative_error])).squeeze())
             self.plant.update(control_signal)
-            self.history.append(float(self.plant.current))
+        self.history.append(float(self.plant.current))
 
         return float(jnp.mean(error_history ** 2))  # Mean Squared Error
     
@@ -49,12 +48,13 @@ class ControlSystem:
     
     def plot_results(self):
         heights = self.history
-        times = np.linspace(0, self.num_timesteps, 50, endpoint=False)
+        times = np.linspace(0, self.num_epochs, self.num_epochs, endpoint=False)
+        plt.figure(figsize=(10, 20))
         
-        plt.plot(times, heights, label='Height')
-        plt.axhline(self.target, color='r', linestyle='--', label='Setpoint')
-        plt.xlabel('Time')
-        plt.ylabel('Height')
+        plt.plot(times, heights, label='Learning Porgression')
+        plt.axhline(self.target, color='r', linestyle='--', label='Target')
+        plt.xlabel('Epochs')
+        plt.ylabel('MSE')
         plt.legend()
         plt.show()
 
