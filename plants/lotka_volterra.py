@@ -14,10 +14,10 @@ class LotkaVolterraPlant:
         self.predator = initial_predator
         self.noise_range = noise_range  # Noise range for randomness
         self.carrying_capacity = carrying_capacity  # Carrying capacity for prey
-        self.current = 0  # Placeholder for output
-
+        self.current = 0  # System state measure
+    
     def update(self, U):
-        # Apply user input to prey population (e.g., resource changes)
+        # Apply user input to prey population (e.g., adding resources)
         self.prey = jnp.maximum(self.prey + U, 0)
         
         # Introduce noise to predator population
@@ -36,8 +36,8 @@ class LotkaVolterraPlant:
         self.prey = jnp.maximum(self.prey + prey_growth, 0)
         self.predator = jnp.maximum(self.predator + predator_growth, 0)
         
-        # Define a measure of system state (e.g., predator-prey balance)
-        self.current = self.prey - self.predator  # Example metric
+        # Define a measure of system state, ensuring compatibility
+        self.current = self.prey * (self.predator - self.a)
         
         return self.current
 
