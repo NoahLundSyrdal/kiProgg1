@@ -14,7 +14,7 @@ class LotkaVolterraPlant:
         self.predator = initial_predator
         self.noise_range = noise_range  # Noise range for randomness
         self.carrying_capacity = carrying_capacity  # Carrying capacity for prey
-        self.current = 0  # System state measure
+        self.inital_state = [0, self.prey, self.predator]
     
     def update(self, U):
         # Apply user input to prey population (e.g., adding resources)

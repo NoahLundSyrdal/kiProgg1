@@ -1,41 +1,48 @@
 import jax.numpy as jnp
+import numpy as np
 import jax
-from jax import grad, jit, random
-import optax
+from jax import random
 
 class NeuralPIDController:
-    def __init__(self, input_dim=3, hidden_layers=[32, 32], output_dim=1, activation_fn=jax.nn.relu, learning_rate=0.03, seed=42):
+    def __init__(self, input_dim=3, hidden_layers=[5, 5], output_dim=1, activation_fn=jax.nn.relu, learning_rate=0.1, seed=42):
+        self.input_dim = input_dim
+        self.hidden_layers = hidden_layers
+        self.output_dim = output_dim
         self.key = random.PRNGKey(seed)
         self.activation_fn = activation_fn
         self.learning_rate = learning_rate
+    
+    def forward(self, params, features):
+        activations = jnp.array(features).reshape(1, -1)  # Ensure it's a row vector
+        for (weights, biases) in params:
+            outputs = jnp.dot(activations, weights) + biases  # Now the dimensions align correctly
+            activations = self.activation_fn(outputs)
 
-        self.params = []
-        layer_sizes = [input_dim] + hidden_layers + [output_dim]
-        for i in range(len(layer_sizes) - 1):
-            key, self.key = random.split(self.key)
-            w = random.normal(key, (layer_sizes[i], layer_sizes[i+1])) * 0.1
-            b = jnp.zeros(layer_sizes[i+1])
-            self.params.append((w, b))
+        return activations
+    
+    def update_params(self, params, gradients):
+        updated_params = []
+        for (w, b), (dw, db) in zip(params, gradients):
+            updated_w = w - self.learning_rate * dw
+            updated_b = b - self.learning_rate * db
+            updated_params.append((updated_w, updated_b))
 
-        self.optimizer = optax.adam(learning_rate)
-        self.opt_state = self.optimizer.init(self.params)
+        return updated_params
     
-    def forward(self, x, params):
-        for i, (w, b) in enumerate(params[:-1]):
-            x = self.activation_fn(jnp.dot(x, w) + b)
-        w_out, b_out = params[-1]
-        return jnp.dot(x, w_out) + b_out
-    
-    def loss_fn(self, params, x, target):
-        pred = self.forward(x, params)
-        return jnp.mean((pred - target) ** 2)
-        
-    def control(self, error_terms):
-        x = jnp.array(error_terms)
-        return self.forward(x, self.params)
-    
-    def train_step(self, error_terms, target):
-        loss, grads = jax.value_and_grad(self.loss_fn)(self.params, error_terms, target)
-        updates, self.opt_state = self.optimizer.update(grads, self.opt_state)
-        self.params = optax.apply_updates(self.params, updates)
-        return loss
+    def update(self, params, error, i_error, d_error):
+        return jnp.squeeze(self.forward(params, jnp.array([error, i_error, d_error])))
+
+
+    def create_params(self):
+        layers = [3, 5, 5, 1]
+        sender = layers[0]
+        params = []
+        for receiver in layers[1:]:
+            weights = np.random.normal(
+                -0.1, 0.1, (int(sender), int(receiver)))
+            biases = np.random.normal(
+                -0.05, 0.05, (1, int(receiver)))
+            params.append([weights, biases])
+            sender = receiver
+        return params
+

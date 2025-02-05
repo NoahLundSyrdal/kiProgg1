@@ -1,22 +1,22 @@
-import jax
 import jax.numpy as jnp
-from jax import random
+import numpy as np
 
 class BathtubPlant:
-    def __init__(self, area, current):
-        self.current = current
+    def __init__(self, initial_state, cross_sectional_area, area, noise_range=(-0.01, 0.01)):
+        self.initial_state = initial_state
+        self.cross_sectional_area = cross_sectional_area
         self.area = area
-        self.cross_sectional_area = area / 100
         self.g = 9.8
+        self.noise_range = noise_range
 
-    def update(self, U, dt = 1):
-        subkey = random.split(jax.random.PRNGKey(0))[0]
-        D = random.normal(subkey) * 0.1
-        V = jnp.sqrt(2 * self.g * self.current)
+    def update(self, U, plant_state):
+        current_water_height = plant_state[0]
+        D = np.random.uniform(self.noise_range[0], self.noise_range[1])
+        V = jnp.sqrt(2 * self.g * current_water_height)
         Q = self.cross_sectional_area * V
         db_dt = U + D - Q
         dh_dt = db_dt / self.area
 
-        self.current += dh_dt * dt
-        self.current = jnp.maximum(self.current, 0)
-        return self.current
+        current_water_height += dh_dt
+        current_water_height = jnp.maximum(current_water_height, 0)
+        return current_water_height
