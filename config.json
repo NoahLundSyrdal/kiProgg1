@@ -9,8 +9,8 @@
     "num_layers": 4,
     "neurons_per_layer": [3, 5, 5, 1],
     "activation_function": "relu",
-    "weight_init_range": [-0.1, 0.1],
-    "bias_init_range": [-0.001, 0.001],
+    "weights_range": [-0.1, 0.1],
+    "biases_range": [-0.001, 0.001],
     "learning_rate": 0.01
   },
   "classic_controller": {

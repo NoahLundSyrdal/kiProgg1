@@ -8,8 +8,8 @@ class NeuralNetworkController():
         self.learning_rate = params["learning_rate"]
         self.num_layers = params["num_layers"]
         self.neurons_per_layer = params["neurons_per_layer"]
-        self.weight_init_range = params["weight_init_range"]
-        self.bias_init_range = params["bias_init_range"]
+        self.weights_range = params["weights_range"]
+        self.biases_range = params["biases_range"]
         self.activation_function = self.get_activation_function(
             params["activation_function"])
 
@@ -19,9 +19,9 @@ class NeuralNetworkController():
         params = []
         for receiver in layers[1:]:
             weights = np.random.normal(
-                self.weight_init_range[0], self.weight_init_range[1], (int(sender), int(receiver)))
+                self.weights_range[0], self.weights_range[1], (int(sender), int(receiver)))
             biases = np.random.normal(
-                self.bias_init_range[0], self.bias_init_range[1], (1, int(receiver)))
+                self.biases_range[0], self.biases_range[1], (1, int(receiver)))
             params.append([weights, biases])
             sender = receiver
         return params
