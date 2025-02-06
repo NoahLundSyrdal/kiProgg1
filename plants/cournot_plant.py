@@ -5,8 +5,8 @@ class CournotPlant():
     def __init__(self, params):
         self.initial_state = params
         self.target_profit = params["target_profit"]
-        self.pmax = params["max_price_pmax"]
-        self.cm = params["marginal_cost_cm"]
+        self.pmax = params["max_price"]
+        self.cm = params["marginal_cost"]
         self.noise = params["noise"]
 
     def update(self, control_signal, plant_state):

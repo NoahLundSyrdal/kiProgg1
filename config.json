@@ -1,23 +1,23 @@
 {
   "general": {
-    "plant": "lotka_volterra_plant",
+    "plant": "bathtub_plant",
     "controller": "classic_controller",
-    "num_epochs": 25,
-    "num_timesteps": 25
+    "num_epochs": 50,
+    "num_timesteps": 50
   },
   "neural_network_controller": {
     "num_layers": 4,
     "neurons_per_layer": [3, 5, 5, 1],
     "activation_function": "relu",
     "weight_init_range": [-0.1, 0.1],
-    "bias_init_range": [-0.05, 0.05],
-    "learning_rate": 0.1
+    "bias_init_range": [-0.001, 0.001],
+    "learning_rate": 0.01
   },
   "classic_controller": {
-    "kp": 0.01,
-    "ki": 0.01,
-    "kd": -0.01,
-    "learning_rate": 0.01
+    "kp": 0.1,
+    "ki": 0.1,
+    "kd": 0.1,
+    "learning_rate": 0.1
   },
   "bathtub_plant": {
     "area": 19.0,
@@ -27,12 +27,12 @@
     "noise": [-0.01, 0.01]
   },
   "cournot_plant": {
-    "max_price_pmax": 10.0,
-    "marginal_cost_cm": 2.0,
-    "target_profit": 7.0,
-    "q1": 2.0,
-    "q2": 2.0,
-    "noise": [-0.01, 0.01]
+    "max_price": 40,
+    "marginal_cost": 0.5,
+    "target_profit": 20,
+    "q1": 0.5,
+    "q2": 0.5,
+    "noise": [-0.001, 0.001]
   },
 
   "lotka_volterra_plant": {

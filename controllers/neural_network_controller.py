@@ -10,8 +10,8 @@ class NeuralNetworkController():
         self.neurons_per_layer = params["neurons_per_layer"]
         self.weight_init_range = params["weight_init_range"]
         self.bias_init_range = params["bias_init_range"]
-        self.activation_functions = self.get_activation_functions(
-            params["activation_functions"])
+        self.activation_function = self.get_activation_function(
+            params["activation_function"])
 
     def init_params(self):
         layers = self.neurons_per_layer
@@ -28,33 +28,32 @@ class NeuralNetworkController():
 
     def predict(self, params, features):
         activations = jnp.array(features)
-        for (weights, biases), fn in zip(params, self.activation_functions):
+        for (weights, biases) in params:
             outputs = jnp.dot(activations, weights) + biases
-            activations = fn(outputs)
+            activations = self.activation_function(outputs)
         return activations
-
+    
     def control_signal(self, params, error_history):
-        P = jnp.asarray(error_history[-1]).reshape(())
-        I = jnp.sum(jnp.array([jnp.asarray(err).reshape(())
-                    for err in error_history]))
-        D = jnp.asarray(error_history[-1] - error_history[-2]).reshape(())
-        return self.predict(params, [P, I, D])
+        kp = error_history[-1]
+        ki = sum(error_history)
+        kd = error_history[-1] - error_history[-2]
+        return self.predict(params, jnp.asarray([kp, ki, kd]).reshape((1,3))) 
 
-    def update_params(self, params, grads):
+    def update_params(self, params, gradients):
         updated_params = []
-        for (w, b), (dw, db) in zip(params, grads):
+        for (w, b), (dw, db) in zip(params, gradients):
             new_w = w - self.learning_rate * dw
             new_b = b - self.learning_rate * db
             updated_params.append((new_w, new_b))
         return updated_params
 
-    def get_activation_functions(self, activation_function_names):
-        activation_map = {
-            "relu": lambda x: jnp.max(x, 0),
-            "sigmoid": lambda x: 1/(1+jnp.exp(-x)),
-            "tanh": lambda x: (jnp.exp(x) - jnp.exp(-x)) / (jnp.exp(x) + jnp.exp(-x))
-        }
-        try:
-            return [activation_map[func] for func in activation_function_names]
-        except KeyError as e:
-            raise ValueError(f"Invalid activation function: {e}")
+    def get_activation_function(self, activation_function):
+        match activation_function:
+            case "relu":
+                return jax.nn.relu
+            case "sigmoid":
+                return jax.nn.sigmoid
+            case "tanh":
+                return jax.nn.tanh
+            case _:
+                raise ValueError(f"Invalid: {activation_function}")
